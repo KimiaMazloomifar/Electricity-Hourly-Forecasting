@@ -364,25 +364,25 @@ The models were evaluated using three regression metrics.
 
 Measures the square root of the average squared prediction errors. Larger errors receive a higher penalty.
 
-\[
+$$
 RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
-\]
+$$
 
 **Mean Absolute Error (MAE)**
 
 Measures the average absolute difference between actual and predicted values.
 
-\[
+$$
 MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y}_i|
-\]
+$$
 
 **R² Score**
 
 Measures how much of the variance in the target variable is explained by the model.
 
-\[
-R^2 = 1 - \frac{\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}{\sum_{i=1}^{n}(y_i-\bar{y})^2}
-\]
+$$
+R^2 = 1-\frac{\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}{\sum_{i=1}^{n}(y_i-\bar{y})^2}
+$$
 
 ### 8.4 Model Comparison
 
