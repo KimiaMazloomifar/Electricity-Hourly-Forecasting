@@ -1,101 +1,145 @@
-# Electricity Demand Forecasting
+# ⚡ Electricity Demand Forecasting
 
-An end-to-end Machine Learning project for forecasting hourly electricity demand using historical electricity consumption and weather data. This project covers the complete ML workflow, from data preparation and exploratory data analysis to model training, evaluation, API development, Docker deployment, and cloud deployment.
+**An End-to-End Machine Learning Project**
 
-**Live API:** https://electricity-hourly-forecasting-2.onrender.com/  
-**API Documentation (Swagger):** https://electricity-hourly-forecasting-2.onrender.com/docs
+An end-to-end machine learning project for forecasting hourly electricity demand using historical electricity consumption and weather data.
+
+This project demonstrates the complete machine learning lifecycle, including data preparation, exploratory data analysis, feature engineering, model training, evaluation, model serialization, REST API development, Docker containerization, and cloud deployment.
+
+<blockquote>
+**Live API:** https://electricity-hourly-forecasting-2.onrender.com/
+
+**Interactive API Documentation:** https://electricity-hourly-forecasting-2.onrender.com/docs
+
+**Health Check:** https://electricity-hourly-forecasting-2.onrender.com/health
+</blockquote>
 
 ---
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
-- [Problem Description](#problem-description)
-- [Dataset](#dataset)
-- [Project Workflow](#project-workflow)
-- [Exploratory Data Analysis](#exploratory-data-analysis)
-- [Feature Engineering](#feature-engineering)
-- [Model Training and Evaluation](#model-training-and-evaluation)
-- [Final Model](#final-model)
-- [Project Structure](#project-structure)
-- [Installation and Setup](#installation-and-setup)
-- [Running the Training Pipeline](#running-the-training-pipeline)
-- [Running the API Locally](#running-the-api-locally)
-- [Docker Deployment](#docker-deployment)
-- [Cloud Deployment](#cloud-deployment)
-- [Making Predictions](#making-predictions)
-- [Technologies Used](#technologies-used)
-- [Limitations and Future Improvements](#limitations-and-future-improvements)
+- [1. Project Overview](#1-project-overview)
+- [2. Problem Description](#2-problem-description)
+- [3. Dataset](#3-dataset)
+- [4. Project Architecture](#4-project-architecture)
+- [5. Data Preparation](#5-data-preparation)
+- [6. Exploratory Data Analysis](#6-exploratory-data-analysis)
+- [7. Feature Engineering](#7-feature-engineering)
+- [8. Model Training and Evaluation](#8-model-training-and-evaluation)
+- [9. Final Model and Hyperparameters](#9-final-model-and-hyperparameters)
+- [10. Model Serialization](#10-model-serialization)
+- [11. Project Structure](#11-project-structure)
+- [12. Installation and Setup](#12-installation-and-setup)
+- [13. Running the Training Pipeline](#13-running-the-training-pipeline)
+- [14. FastAPI Web Service](#14-fastapi-web-service)
+- [15. Docker Deployment](#15-docker-deployment)
+- [16. Cloud Deployment](#16-cloud-deployment)
+- [17. Making Predictions](#17-making-predictions)
+- [18. Technologies and Tools](#18-technologies-and-tools)
+- [19. Limitations and Future Improvements](#19-limitations-and-future-improvements)
+- [20. Project Checklist](#20-project-checklist)
 
 ---
 
-## Project Overview
+## 1. Project Overview
 
-Electricity demand forecasting is an important task in modern energy management. Accurate predictions of electricity consumption can help energy providers optimize power generation, manage electricity distribution, reduce operational costs, and maintain grid stability.
+Electricity demand forecasting plays an important role in modern energy management. Accurate predictions of electricity consumption help energy providers plan power generation, optimize electricity distribution, reduce operational costs, and maintain grid stability.
 
-In this project, I developed a machine learning solution to predict hourly electricity demand using historical demand patterns, time-based features, and weather conditions.
+In this project, I developed a machine learning regression solution to predict hourly electricity demand using:
 
-The project follows an end-to-end machine learning workflow:
+- Historical electricity consumption.
+- Time-based information.
+- Weather conditions.
+- Lagged demand observations.
+- Rolling statistical features.
 
-1. Selecting a real-world problem and obtaining a dataset.
-2. Understanding and preparing the data.
-3. Performing exploratory data analysis (EDA).
-4. Engineering relevant features.
-5. Training and comparing multiple regression models.
-6. Evaluating and selecting the best-performing model.
-7. Exporting the machine learning workflow into reusable Python scripts.
-8. Developing a prediction API using FastAPI.
-9. Containerizing and deploying the application locally using Docker.
-10. Deploying the API to the cloud using Render.
 
-## Problem Description
+### Main Objectives
 
-Electricity consumption changes over time due to several factors, including:
+The main objectives of this project were to:
 
-- Hour of the day
-- Day of the week
-- Seasonal patterns
-- Weekends and weekdays
-- Temperature and humidity
-- Recent electricity consumption patterns
+1. Identify an interesting real-world machine learning problem.
+2. Find and prepare a relevant dataset.
+3. Perform exploratory data analysis to understand the data.
+4. Engineer meaningful features for time-series prediction.
+5. Train and compare multiple regression algorithms.
+6. Evaluate model performance and select the best model.
+7. Convert the notebook workflow into reusable Python modules.
+8. Build a REST API for serving predictions.
+9. Containerize the application using Docker.
+10. Deploy the prediction service to the cloud.
 
-The goal of this project is to build a regression model that predicts hourly electricity demand based on these variables.
+---
 
-### How can this model be used?
+## 2. Problem Description
 
-An electricity provider could use this model to estimate near-future electricity demand and support:
+Electricity consumption is influenced by several temporal and environmental factors.
 
-- Electricity generation planning.
-- Load balancing and grid management.
-- Energy resource allocation.
-- Operational planning.
-- Identifying changes in consumption patterns.
+Demand can change depending on:
 
-The model uses historical demand information and weather conditions to estimate electricity demand for a given hour.
+- The hour of the day.
+- The day of the week.
+- Seasonal patterns.
+- Weekends and weekdays.
+- Temperature and humidity.
+- Recent electricity consumption.
 
-## Dataset
+The objective is to predict electricity demand for a particular hour based on these variables.
+
+### Business Use Cases
+
+An electricity provider could use an hourly demand forecasting model to support:
+
+| Use Case | Description |
+|---|---|
+| Power Generation Planning | Estimate future electricity requirements and plan generation accordingly. |
+| Load Balancing | Help balance electricity supply and demand. |
+| Resource Allocation | Support efficient allocation of energy resources. |
+| Operational Planning | Improve short-term operational decisions. |
+| Consumption Analysis | Understand temporal electricity consumption patterns. |
+
+### Machine Learning Approach
+
+This problem is formulated as a **supervised regression task**.
+
+The model receives a set of engineered input features and predicts a continuous numerical value representing electricity demand.
+
+\[
+\hat{y} = f(X)
+\]
+
+Where:
+
+- \(X\) represents the input features.
+- \(f\) represents the trained regression model.
+- \(\hat{y}\) represents the predicted electricity demand.
+
+---
+
+## 3. Dataset
 
 The project uses an hourly electricity demand dataset containing historical electricity consumption and weather-related information.
 
-### Dataset characteristics
+### Dataset Characteristics
 
 | Property | Description |
 |---|---|
-| Data type | Time series |
+| Dataset type | Time Series |
 | Frequency | Hourly |
-| Approximate number of observations | 43,676 |
+| Approximate observations | 43,848 |
 | Start date | January 8, 2020 |
 | End date | December 31, 2024 |
 | Target variable | `Demand` |
-| Main input variables | Time features, weather conditions, and historical demand features |
+| Weather variables | `Temperature`, `Humidity` |
+| Problem type | Regression |
 
-### Target variable
+### Target Variable
 
-`Demand` represents the electricity demand that the model is trained to predict.
+`Demand` is the target variable representing the electricity demand that the model attempts to predict.
 
-### Input variables
+### Input Features
 
-The final model uses the following 13 features:
+The final model uses 13 engineered features:
 
 | Feature | Description |
 |---|---|
@@ -113,92 +157,234 @@ The final model uses the following 13 features:
 | `demand_rolling_mean_24hr` | Rolling mean of demand over the previous 24 hours |
 | `demand_rolling_std_24hr` | Rolling standard deviation of demand over the previous 24 hours |
 
-## Project Workflow
+---
 
-### 1. Data Preparation
+## 4. Project Architecture
 
-The initial dataset was processed to ensure that it was suitable for time-series analysis and machine learning.
+The project follows a modular architecture that separates data processing, feature engineering, model training, prediction, and API development.
 
-The preparation steps included:
+### Workflow
 
-- Converting the timestamp column into a datetime format.
-- Removing invalid timestamps.
-- Setting the timestamp as the DataFrame index.
-- Sorting observations chronologically.
-- Handling missing weather values using time-based interpolation and forward/backward filling.
-- Removing observations with missing target values.
-- Creating additional time-based and historical demand features.
-- Removing rows with missing values generated during feature engineering.
+```mermaid
+flowchart TD
+    A["Hourly Electricity Demand Dataset"] --> B["Data Preparation"]
+    B --> C["Exploratory Data Analysis"]
+    C --> D["Feature Engineering"]
+    D --> E["Chronological Data Splitting"]
+    E --> F["Model Training"]
+    F --> G["Model Evaluation"]
+    G --> H["XGBoost Model Selection"]
+    H --> I["Model Serialization with Joblib"]
+    I --> J["FastAPI Prediction Service"]
+    J --> K["Docker Container"]
+    K --> L["Local Deployment"]
+    K --> M["Cloud Deployment on Render"]
+```
 
-### 2. Exploratory Data Analysis (EDA)
+### Main Components
 
-Exploratory Data Analysis was performed to understand the dataset, identify patterns, and investigate relationships between electricity demand and other variables.
+| Component | Responsibility |
+|---|---|
+| `data.py` | Loading, cleaning, and preparing the dataset |
+| `features.py` | Creating time-based and historical demand features |
+| `train.py` | Training, evaluating, comparing, and exporting models |
+| `predict.py` | Loading the trained model and generating predictions |
+| `app.py` | Exposing the model through FastAPI endpoints |
+| `Dockerfile` | Defining the application container environment |
 
-The analysis focused on:
+---
 
-- Understanding the distribution of electricity demand.
-- Examining demand patterns over time.
-- Investigating hourly, daily, monthly, and seasonal variations.
-- Comparing weekday and weekend consumption patterns.
-- Exploring the relationship between weather conditions and electricity demand.
-- Examining correlations between numerical features.
-- Identifying potentially important features for prediction.
+## 5. Data Preparation
 
-### 3. Feature Engineering
+The raw dataset was processed to make it suitable for time-series analysis and machine learning.
 
-Feature engineering was used to extract useful information from timestamps and historical demand observations.
+The main preprocessing steps included:
 
-The main transformations included:
+### 5.1 Timestamp Processing
 
-- Extracting hour, weekday, month, year, and day of year.
-- Creating a season-related feature.
-- Identifying weekends.
-- Generating a 24-hour lag feature.
-- Calculating rolling mean and standard deviation over a 24-hour window.
+- Converted the timestamp column into a Pandas datetime format.
+- Removed records containing invalid timestamps.
+- Set the timestamp as the DataFrame index.
+- Sorted observations chronologically.
 
-To avoid using the current target value when calculating historical rolling statistics, the demand series was shifted by one time step before calculating the rolling features.
+### 5.2 Missing Value Handling
 
-### 4. Train, Validation, and Test Split
+Missing values were investigated and handled according to the type of variable.
 
-Because the dataset represents a time series, observations were split chronologically rather than randomly.
+For weather-related features:
 
-The initial split used:
+- Time-based interpolation was applied.
+- Forward filling and backward filling were used to handle remaining missing values.
 
-- 80% for training and validation.
-- 20% for final testing.
+For the target variable:
 
-The training portion was further divided into training and validation subsets.
+- Observations with missing electricity demand values were removed.
 
-The validation set was used during model development, while the test set was reserved for final performance evaluation.
+### 5.3 Data Validation
 
-## Model Training and Evaluation
+After preprocessing:
+
+- The chronological order of observations was maintained.
+- Missing target values were removed.
+- Feature engineering was performed on the cleaned dataset.
+- Rows containing missing values created by lag and rolling calculations were removed.
+
+---
+
+## 6. Exploratory Data Analysis
+
+Exploratory Data Analysis (EDA) was performed to understand the dataset, identify consumption patterns, and investigate relationships between electricity demand and other variables.
+
+The main analysis areas included:
+
+### 6.1 Demand Distribution
+
+Investigating the distribution of electricity demand to understand its range, variability, and potential outliers.
+
+### 6.2 Temporal Patterns
+
+Analyzing electricity consumption across different time dimensions:
+
+- Hourly demand patterns.
+- Daily consumption patterns.
+- Monthly demand variations.
+- Seasonal changes.
+- Yearly consumption trends.
+
+### 6.3 Weekday vs. Weekend Analysis
+
+Comparing electricity consumption during weekdays and weekends to identify differences in demand behavior.
+
+### 6.4 Weather Relationships
+
+Investigating the relationships between electricity demand and:
+
+- Temperature.
+- Humidity.
+
+### 6.5 Correlation Analysis
+
+Examining correlations between numerical features to understand their relationships and identify potentially useful predictors.
+
+### 6.6 Feature Analysis
+
+Investigating the relevance of temporal, weather-related, and historical demand features for predicting electricity consumption.
+
+---
+
+## 7. Feature Engineering
+
+Feature engineering was an important part of this project because electricity demand has strong temporal characteristics.
+
+The following features were created from the timestamp and historical demand data.
+
+### 7.1 Time-Based Features
+
+| Feature | Purpose |
+|---|---|
+| `hour` | Captures hourly consumption patterns |
+| `dayofweek` | Captures differences between days of the week |
+| `month` | Captures monthly and seasonal variations |
+| `year` | Represents yearly changes |
+| `dayofyear` | Captures position within the year |
+| `season` | Represents season-related variations |
+| `weekofyear` | Captures weekly patterns |
+| `is_weekend` | Distinguishes weekends from weekdays |
+
+### 7.2 Lag Features
+
+A lag feature uses historical observations as additional model inputs.
+
+The project includes:
+
+**24-hour lag:**
+
+\[
+Demand_{lag24}(t) = Demand(t-24)
+\]
+
+This feature provides information about electricity demand at the same hour on the previous day.
+
+### 7.3 Rolling Statistical Features
+
+Rolling statistics summarize recent electricity consumption.
+
+**24-hour rolling mean:**
+
+\[
+RollingMean_{24}(t) =
+\frac{1}{24}
+\sum_{i=1}^{24} Demand(t-i)
+\]
+
+**24-hour rolling standard deviation:**
+
+\[
+RollingStd_{24}(t) =
+Std(Demand(t-24), \ldots, Demand(t-1))
+\]
+
+The demand series was shifted by one time step before calculating rolling statistics to avoid including the current target value in the historical rolling window.
+
+---
+
+## 8. Model Training and Evaluation
 
 Multiple regression algorithms were trained and compared to identify the most suitable model for electricity demand prediction.
 
-### Models evaluated
+### 8.1 Models Evaluated
 
-- Linear Regression
-- Decision Tree Regressor
-- Random Forest Regressor
-- XGBoost Regressor
+Four regression algorithms were selected:
 
-### Evaluation metrics
+| Model | Description |
+|---|---|
+| Linear Regression | A baseline linear regression model |
+| Decision Tree Regressor | A tree-based model that captures nonlinear relationships |
+| Random Forest Regressor | An ensemble of decision trees |
+| XGBoost Regressor | A gradient boosting algorithm based on decision trees |
 
-The models were evaluated using three standard regression metrics:
+### 8.2 Train, Validation, and Test Split
 
-**RMSE (Root Mean Squared Error)**
+Since the dataset represents a time series, a chronological splitting strategy was used instead of random shuffling.
 
-Measures the square root of the average squared prediction error. It penalizes larger errors more heavily.
+The initial split:
 
-**MAE (Mean Absolute Error)**
+- 80% training and validation data.
+- 20% final test data.
+
+The training portion was further divided into training and validation subsets.
+
+The validation data was used during model development, while the test data was reserved for final performance evaluation.
+
+### 8.3 Evaluation Metrics
+
+The models were evaluated using three regression metrics.
+
+**Root Mean Squared Error (RMSE)**
+
+Measures the square root of the average squared prediction errors. Larger errors receive a higher penalty.
+
+\[
+RMSE = \sqrt{\frac{1}{n}\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}
+\]
+
+**Mean Absolute Error (MAE)**
 
 Measures the average absolute difference between actual and predicted values.
+
+\[
+MAE = \frac{1}{n}\sum_{i=1}^{n}|y_i-\hat{y}_i|
+\]
 
 **R² Score**
 
 Measures how much of the variance in the target variable is explained by the model.
 
-### Model comparison
+\[
+R^2 = 1 - \frac{\sum_{i=1}^{n}(y_i-\hat{y}_i)^2}{\sum_{i=1}^{n}(y_i-\bar{y})^2}
+\]
+
+### 8.4 Model Comparison
 
 The following results were obtained on the test dataset:
 
@@ -209,19 +395,21 @@ The following results were obtained on the test dataset:
 | Random Forest | 177.42 | 135.91 | 0.9840 |
 | **XGBoost** | **146.39** | **112.80** | **0.9891** |
 
-### Results
+### 8.5 Model Selection
 
 XGBoost achieved the best performance among the evaluated models.
 
-Compared with the other models, it achieved:
+It obtained:
 
 - The lowest RMSE.
 - The lowest MAE.
 - The highest R² score.
 
-These results indicate that XGBoost was the most effective model among the tested algorithms for this dataset and evaluation setup.
+Based on these evaluation results, XGBoost was selected as the final model.
 
-## Final Model
+---
+
+## 9. Final Model and Hyperparameters
 
 **Selected model: XGBoost Regressor**
 
@@ -239,35 +427,38 @@ The XGBoost model was configured with the following main hyperparameters:
 | `eval_metric` | `rmse` |
 | `early_stopping_rounds` | 50 |
 
-Early stopping was used with the validation set to help prevent unnecessary boosting iterations.
+### Early Stopping
 
-After model selection, the final model was exported using Joblib.
+Early stopping was used during training with the validation set.
 
-The saved artifact contains:
+This allows the training process to stop when validation performance no longer improves for the specified number of boosting rounds.
 
-- The trained model.
-- The expected feature names.
-- The model name.
-- The target variable name.
+The final model was then exported for use in the prediction service.
+
+---
+
+## 10. Model Serialization
+
+The selected XGBoost model was saved using Joblib.
 
 **Model artifact:**
 
 `electricity_demand_xgb_prediction_model.pkl`
 
-## Exporting the Notebook into Python Scripts
+The serialized artifact contains:
 
-The machine learning workflow was organized into reusable Python modules to make the project easier to maintain and deploy.
+- The trained XGBoost model.
+- The expected feature names.
+- The model name.
+- The target variable name.
 
-The main responsibilities are separated into:
+The prediction module loads this artifact and uses it to generate predictions without requiring the model to be trained again.
 
-- `data.py`: Data loading and preparation.
-- `features.py`: Feature engineering.
-- `train.py`: Model training, evaluation, comparison, and model export.
-- `predict.py`: Loading the saved model and generating predictions.
+---
 
-The FastAPI application is implemented separately in `app.py`.
+## 11. Project Structure
 
-## Project Structure
+The project is organized into reusable Python modules, with the notebook, dataset, model artifact, API, and deployment configuration files located in the project root.
 
 ```text
 Electricity-Hourly-Demand-Forecasting/
@@ -280,17 +471,49 @@ Electricity-Hourly-Demand-Forecasting/
 │   └── predict.py
 │
 ├── electricity_demand_forecasting.ipynb
+│
 ├── Electricity Demand Dataset.csv
+│
 ├── electricity_demand_xgb_prediction_model.pkl
+│
 ├── app.py
+│
 ├── requirements.txt
+│
 ├── Dockerfile
+│
 ├── .dockerignore
+│
 ├── .gitignore
+│
 └── README.md
 ```
 
-## Installation and Setup
+### Source Modules
+
+**`src/data.py`**
+
+Responsible for loading the dataset, cleaning the data, and preparing the chronological data splits.
+
+**`src/features.py`**
+
+Contains the feature engineering logic used to generate time-based and historical demand features.
+
+**`src/train.py`**
+
+Implements the model training and evaluation workflow, compares different regression algorithms, selects the final model, and exports the model artifact.
+
+**`src/predict.py`**
+
+Loads the serialized model and provides the functionality required to generate predictions.
+
+**`app.py`**
+
+Implements the FastAPI application and exposes the trained model through HTTP endpoints.
+
+---
+
+## 12. Installation and Setup
 
 ### Prerequisites
 
@@ -299,16 +522,16 @@ Make sure the following tools are installed:
 - Python 3.14 or a compatible Python version supported by the project dependencies.
 - pip
 - Git
-- Docker (for containerized deployment)
+- Docker Desktop or Docker Engine.
 
-### 1. Clone the repository
+### 12.1 Clone the Repository
 
 ```bash
-git clone <YOUR_GITHUB_REPOSITORY_URL>
+git clone https://github.com/KimiaMazloomifar/Electricity-Hourly-Forecasting.git
 cd Electricity-Hourly-Demand-Forecasting
 ```
 
-### 2. Create a virtual environment
+### 12.2 Create a Virtual Environment
 
 **Windows:**
 
@@ -324,15 +547,19 @@ python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-### 3. Install dependencies
+### 12.3 Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running the Training Pipeline
+---
 
-To execute the training pipeline from the project root:
+## 13. Running the Training Pipeline
+
+The training workflow is implemented as a reusable Python module.
+
+To execute the pipeline from the project root:
 
 ```bash
 python -m src.train
@@ -342,45 +569,64 @@ This process performs the training and evaluation workflow and exports the final
 
 Make sure the dataset is available in the expected project directory before running the training pipeline.
 
-## Running the API Locally
+The trained model is saved as:
 
-The project uses FastAPI to expose the trained model through HTTP endpoints.
+```text
+electricity_demand_xgb_prediction_model.pkl
+```
 
-Start the API with:
+---
+
+## 14. FastAPI Web Service
+
+FastAPI was used to expose the trained machine learning model through a REST API.
+
+The API loads the serialized XGBoost model and provides endpoints for checking service status and generating electricity demand predictions.
+
+### API Endpoints
+
+| Endpoint | Method | Description |
+|---|---|---|
+| `/` | GET | Returns API information and running status |
+| `/health` | GET | Checks service health |
+| `/predict` | POST | Generates an electricity demand prediction |
+| `/docs` | GET | Interactive Swagger documentation |
+<img width="1866" height="880" alt="image" src="https://github.com/user-attachments/assets/5bd7dc67-8e4e-4454-a188-0ddd41b3ecd4" />
+
+### Run the API Locally
+
+From the project root:
 
 ```bash
 uvicorn app:app --host 0.0.0.0 --port 8000
 ```
 
-Once the server is running, the following endpoints are available:
-
-| Endpoint | Method | Description |
-|---|---|---|
-| `/` | GET | API information and running status |
-| `/health` | GET | Health check |
-| `/predict` | POST | Generate an electricity demand prediction |
-| `/docs` | GET | Interactive Swagger API documentation |
-
-Open the following address in your browser:
+Open the API documentation:
 
 ```text
 http://localhost:8000/docs
 ```
 
-## Docker Deployment
+The Swagger interface allows users to test the prediction endpoint directly from a browser.
 
-The application was containerized using Docker to ensure consistent execution across different environments.
+---
+
+## 15. Docker Deployment
+
+The application was containerized using Docker to provide a consistent execution environment and simplify deployment.
+
+### Docker Image Components
 
 The Docker image includes:
 
 - Python runtime.
 - Required Python dependencies.
-- System dependency required by XGBoost.
+- `libgomp1`, required by XGBoost.
 - FastAPI application.
-- Source modules.
-- Trained XGBoost model artifact.
+- Python source modules.
+- Serialized XGBoost model artifact.
 
-### 1. Build the Docker image
+### 15.1 Build the Docker Image
 
 From the project root:
 
@@ -388,17 +634,17 @@ From the project root:
 docker build -t electricity-demand-api .
 ```
 
-### 2. Run the Docker container
+### 15.2 Run the Docker Container
 
-The application listens on port `8000` inside the container. The same port is exposed on the host machine.
+The application listens on port `8000` inside the container.
+
+The host machine also exposes port `8000`.
 
 ```bash
 docker run -d -p 8000:8000 --name electricity-demand-container electricity-demand-api
 ```
 
-### 3. Access the containerized API
-
-The API is now available at:
+### 15.3 Access the Containerized API
 
 **Main API:**
 
@@ -406,77 +652,87 @@ The API is now available at:
 http://localhost:8000/
 ```
 
-**Swagger documentation:**
+**Swagger Documentation:**
 
 ```text
 http://localhost:8000/docs
 ```
 
-**Health check:**
+**Health Check:**
 
 ```text
 http://localhost:8000/health
 ```
 
-### 4. Check the running container
+### 15.4 Container Management
+
+Check running containers:
 
 ```bash
 docker ps
 ```
 
-To view container logs:
+View application logs:
 
 ```bash
 docker logs electricity-demand-container
 ```
 
-To stop the container:
+Stop the container:
 
 ```bash
 docker stop electricity-demand-container
 ```
 
-To remove the container:
+Remove the container:
 
 ```bash
 docker rm electricity-demand-container
 ```
 
-## Cloud Deployment
+---
 
-As an additional deployment step, the FastAPI application was deployed to the cloud using **Render**.
+## 16. Cloud Deployment
 
-The application is publicly accessible through the following URLs:
+As an additional step beyond the core project requirements, the FastAPI application was deployed to the cloud using **Render**.
 
-**Live API:**
+This makes the prediction service publicly accessible without requiring users to install Python, download the model, or run Docker locally.
 
-https://electricity-hourly-forecasting-2.onrender.com/
+### Live Application
 
-**Swagger Documentation:**
+| Resource | URL |
+|---|---|
+| Live API | https://electricity-hourly-forecasting-2.onrender.com/ |
+| Swagger Documentation | https://electricity-hourly-forecasting-2.onrender.com/docs |
+| Health Check | https://electricity-hourly-forecasting-2.onrender.com/health |
 
-https://electricity-hourly-forecasting-2.onrender.com/docs
+### Deployment Overview
 
-**Health Check:**
+The cloud deployment uses the application source code and trained model artifact to run the FastAPI service on Render.
 
-https://electricity-hourly-forecasting-2.onrender.com/health
+The deployed service exposes the same API endpoints as the local application.
 
-The cloud deployment makes it possible to access the prediction service without running the application locally.
+**Note:** Render's free web services may spin down after a period of inactivity. The first request after inactivity may take longer because the service needs to start again.
 
-> Note: Render's free web services may spin down after a period of inactivity. The first request after inactivity may take longer because the service needs to start again.
+---
 
-## Making Predictions
+## 17. Making Predictions
 
 The `/predict` endpoint accepts a JSON object containing the 13 engineered input features and returns the predicted electricity demand.
 
-### Example request
+The input features must be prepared before sending the request.
 
-**POST**
+### 17.1 Example Request
+
+**Method:** `POST`
+
+**Endpoint:**
 
 ```text
 /predict
 ```
 
-**Request body:**
+**Request Body:**
 
 ```json
 {
@@ -496,7 +752,7 @@ The `/predict` endpoint accepts a JSON object containing the 13 engineered input
 }
 ```
 
-### Example response
+### 17.2 Example Response
 
 ```json
 {
@@ -505,13 +761,28 @@ The `/predict` endpoint accepts a JSON object containing the 13 engineered input
 }
 ```
 
-The predicted value above is illustrative; actual output depends on the supplied input features.
+The predicted value above is an example response from the API. Actual predictions depend on the supplied input features.
 
-You can test the endpoint directly through the live Swagger interface:
+### 17.3 Test the Live API
+
+The prediction endpoint can be tested using the interactive Swagger interface:
 
 https://electricity-hourly-forecasting-2.onrender.com/docs
 
-## Technologies Used
+Steps:
+
+1. Open the Swagger documentation.
+2. Expand `POST /predict`.
+3. Click **Try it out**.
+4. Enter the input JSON.
+5. Click **Execute**.
+6. Inspect the prediction response.
+
+---
+
+## 18. Technologies and Tools
+
+The project uses the following technologies and libraries:
 
 | Category | Technologies |
 |---|---|
@@ -529,38 +800,60 @@ https://electricity-hourly-forecasting-2.onrender.com/docs
 | Version Control | Git, GitHub |
 | Development Environment | Jupyter Notebook |
 
-## Limitations and Future Improvements
+---
 
-Although the project achieved strong results, there are several opportunities for improvement:
+## 19. Limitations and Future Improvements
+
+Although the project achieved strong evaluation results, there are several opportunities for further development.
+
+### Forecasting Improvements
 
 - Experiment with additional time-series forecasting approaches.
-- Perform more extensive hyperparameter optimization.
-- Investigate the impact of weather forecasts on future electricity demand predictions.
-- Add more historical lag features, such as 48-hour and 168-hour lags.
+- Investigate more extensive hyperparameter optimization.
+- Add additional historical lag features, such as 48-hour and 168-hour lags.
+- Investigate the impact of external weather forecasts on future electricity demand.
 - Explore prediction intervals to quantify forecasting uncertainty.
-- Improve the API to accept timestamps and historical observations instead of requiring users to calculate all engineered features themselves.
+
+### API Improvements
+
+- Allow the API to accept timestamps and historical observations instead of requiring users to calculate all engineered features manually.
+- Add more comprehensive request validation.
+- Add automated API tests.
+- Improve error handling and logging.
+
+### MLOps Improvements
+
 - Add automated testing and continuous integration/deployment.
-- Monitor model performance and data drift after deployment.
+- Monitor model performance after deployment.
+- Monitor data drift.
+- Develop a process for periodically retraining the model.
+- Track model versions and experiments.
 
-### Forecasting Setup
+### Forecasting Setup and Evaluation Considerations
 
-The current API expects the 13 engineered features as input. In particular, lag and rolling features depend on historical demand observations.
+The current API expects 13 engineered features as input. In particular, lag and rolling features depend on historical demand observations.
 
-The evaluation setup is chronological and uses observed historical demand to construct lag and rolling features. Therefore, the reported test performance represents a historical one-step-ahead prediction setup, rather than an independent multi-day forecast without access to newly observed demand.
+The evaluation setup is chronological and uses observed historical demand to construct lag and rolling features.
+
+Therefore, the reported test performance represents a historical one-step-ahead prediction setup, rather than an independent multi-day forecast without access to newly observed demand.
+
+This distinction is important when considering how the model could be used in a real-world forecasting system.
 
 ---
 
-## Project Completion Checklist
+## 20. Project Checklist
 
-| ML Zoomcamp Requirement | Status |
-|---|---|
-| Choose an interesting problem and find a dataset | Completed |
-| Describe the problem and explain how a model can be used | Completed |
-| Prepare the data and perform EDA | Completed |
-| Analyze and engineer important features | Completed |
-| Train multiple models | Completed |
-| Evaluate models and select the best-performing model | Completed |
-| Export the notebook workflow into Python scripts | Completed |
-| Develop a web service for the model | Completed |
-| Deploy the service locally using Docker | Completed |
-| Deploy the service to the cloud | Completed — Render |
+This project was developed to apply the concepts covered in the Machine Learning Zoomcamp.
+
+| ML Zoomcamp Requirement | Implementation | Status |
+|---|---|---|
+| Choose an interesting problem and find a dataset | Hourly electricity demand forecasting | Completed |
+| Describe the problem and explain how a model can be used | Problem definition and business use cases | Completed |
+| Prepare the data and perform EDA | Data cleaning, visualization, and analysis | Completed |
+| Analyze important features | Time-based, weather, lag, and rolling features | Completed |
+| Train multiple models | Linear Regression, Decision Tree, Random Forest, XGBoost | Completed |
+| Tune and select the best model | XGBoost configuration and validation-based early stopping | Completed |
+| Export the notebook into a script | Modular Python source files | Completed |
+| Put the model into a web service | FastAPI REST API | Completed |
+| Deploy the service locally with Docker | Docker image and container | Completed |
+| Deploy the service to the cloud | Render deployment | Completed |
