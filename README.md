@@ -500,7 +500,7 @@ The `/predict` endpoint accepts a JSON object containing the 13 engineered input
 
 ```json
 {
-  "predicted_demand": 1215.42,
+  "predicted_demand": 3582.507568359375,
   "model_name": "XGBoost"
 }
 ```
