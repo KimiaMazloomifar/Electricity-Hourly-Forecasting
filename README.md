@@ -564,11 +564,3 @@ The evaluation setup is chronological and uses observed historical demand to con
 | Develop a web service for the model | Completed |
 | Deploy the service locally using Docker | Completed |
 | Deploy the service to the cloud | Completed — Render |
-
----
-
-**Author:** [Your Name]
-
-**Project:** Electricity Demand Forecasting
-
-**Course:** Machine Learning Zoomcamp
