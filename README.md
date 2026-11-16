@@ -104,9 +104,9 @@ This problem is formulated as a **supervised regression task**.
 
 The model receives a set of engineered input features and predicts a continuous numerical value representing electricity demand.
 
-\[
+$$
 \hat{y} = f(X)
-\]
+$$
 
 Where:
 
@@ -162,24 +162,6 @@ The final model uses 13 engineered features:
 ## 4. Project Architecture
 
 The project follows a modular architecture that separates data processing, feature engineering, model training, prediction, and API development.
-
-### Workflow
-
-```mermaid
-flowchart TD
-    A["Hourly Electricity Demand Dataset"] --> B["Data Preparation"]
-    B --> C["Exploratory Data Analysis"]
-    C --> D["Feature Engineering"]
-    D --> E["Chronological Data Splitting"]
-    E --> F["Model Training"]
-    F --> G["Model Evaluation"]
-    G --> H["XGBoost Model Selection"]
-    H --> I["Model Serialization with Joblib"]
-    I --> J["FastAPI Prediction Service"]
-    J --> K["Docker Container"]
-    K --> L["Local Deployment"]
-    K --> M["Cloud Deployment on Render"]
-```
 
 ### Main Components
 
@@ -291,40 +273,37 @@ The following features were created from the timestamp and historical demand dat
 | `weekofyear` | Captures weekly patterns |
 | `is_weekend` | Distinguishes weekends from weekdays |
 
-### 7.2 Lag Features
+7.2 Lag Features
 
-A lag feature uses historical observations as additional model inputs.
+Lag features use previous demand values to help the model identify recurring patterns.
 
-The project includes:
+24-hour lag:
 
-**24-hour lag:**
-
-\[
+$$
 Demand_{lag24}(t) = Demand(t-24)
-\]
+$$
 
-This feature provides information about electricity demand at the same hour on the previous day.
+This feature represents electricity demand at the same hour on the previous day.
 
-### 7.3 Rolling Statistical Features
+7.3 Rolling Statistical Features
 
-Rolling statistics summarize recent electricity consumption.
+Rolling features capture recent changes in electricity demand.
 
-**24-hour rolling mean:**
+24-hour rolling mean:
 
-\[
+$$
 RollingMean_{24}(t) =
-\frac{1}{24}
-\sum_{i=1}^{24} Demand(t-i)
-\]
+\frac{1}{24}\sum_{i=1}^{24} Demand(t-i)
+$$
 
-**24-hour rolling standard deviation:**
+24-hour rolling standard deviation:
 
-\[
+$$
 RollingStd_{24}(t) =
 Std(Demand(t-24), \ldots, Demand(t-1))
-\]
+$$
 
-The demand series was shifted by one time step before calculating rolling statistics to avoid including the current target value in the historical rolling window.
+Before calculating these features, the demand series was shifted by one hour to ensure that the current target value was not included in the calculations.
 
 ---
 
