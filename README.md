@@ -507,7 +507,7 @@ Make sure the following tools are installed:
 
 ```bash
 git clone https://github.com/KimiaMazloomifar/Electricity-Hourly-Forecasting.git
-cd Electricity-Hourly-Demand-Forecasting
+cd Electricity-Hourly-Forecasting
 ```
 
 ### 12.2 Create a Virtual Environment
